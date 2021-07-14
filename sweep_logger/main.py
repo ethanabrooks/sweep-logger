@@ -7,7 +7,8 @@ from typing import Optional
 
 import yaml
 from redis import Redis
-# from run_logger import ParamChoice, SweepMethod, get_logger
+
+from run_logger import ParamChoice, SweepMethod, get_logger
 
 from sweep_logger.reproducibility_info import get_reproducibility_info
 
@@ -25,7 +26,6 @@ def run(
     logger: str,
     method: str,
 ) -> int:
-    breakpoint()
     config = load_config(config)
     logging.getLogger().setLevel(log_level)
     metadata = dict(
@@ -67,46 +67,48 @@ log_levels = [
     "NOTSET",
 ]
 
-def main():
-    print("main from main")
 
-if __name__ == "__main__":
-    PARSER = argparse.ArgumentParser()
-    PARSER.add_argument(
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "--config",
         "-c",
         help="path to sweep config yaml file",
         type=Path,
         default=Path("config.yml"),
     )
-    PARSER.add_argument(
+    parser.add_argument(
         "--name", "-n", help="name of sweep (logged in metadata)", default=None
     )
-    PARSER.add_argument(
+    parser.add_argument(
         "--project", "-p", help="name of project (logged in metadata)", default=None
     )
-    PARSER.add_argument(
+    parser.add_argument(
         "--logger",
         "-l",
         help="type of logger",
         choices=["hasura", "jsonlines"],
         default="hasura",
     )
-    PARSER.add_argument("--log-level", "-ll", choices=log_levels, default="info")
-    PARSER.add_argument(
+    parser.add_argument("--log-level", "-ll", choices=log_levels, default="info")
+    parser.add_argument(
         "--method",
         "-m",
         choices=["grid", "random"],
         default="random",
         help="whether to perform grid-search on parameters in config.yml or randomly sample",
     )
-    PARSER.set_defaults(func=run)
-    SUBPARSERS = PARSER.add_subparsers()
-    REDIS_PARSER = SUBPARSERS.add_parser("redis")
-    REDIS_PARSER.set_defaults(func=run_redis)
-    REDIS_PARSER.add_argument("--host", default="redis")
-    REDIS_PARSER.add_argument("--port", default=6379)
-    ARGS = PARSER.parse_args()
-    _ARGS = vars(copy.deepcopy(ARGS))
-    del _ARGS["func"]
-    ARGS.func(**_ARGS)
+    parser.set_defaults(func=run)
+    subparsers = parser.add_subparsers()
+    redis_parser = subparsers.add_parser("redis")
+    redis_parser.set_defaults(func=run_redis)
+    redis_parser.add_argument("--host", default="redis")
+    redis_parser.add_argument("--port", default=6379)
+    args = parser.parse_args()
+    _args = vars(copy.deepcopy(args))
+    del _args["func"]
+    args.func(**_args)
+
+
+if __name__ == "__main__":
+    main()

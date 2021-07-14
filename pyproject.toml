@@ -5,15 +5,15 @@ description = ""
 authors = ["Ethan Brooks <ethanabrooks@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 PyYAML = "^5.4.1"
+run-logger = {git = "https://github.com/ethanabrooks/run-logger.git", rev = "main"}
 redis = "^3.5.3"
 
 [tool.poetry.dev-dependencies]
+ipdb = "^0.13.9"
+black = "^21.6b0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-main = 'sweep_logger.main:main'
