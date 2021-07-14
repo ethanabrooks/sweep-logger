@@ -367,7 +367,7 @@ version = "0.1.0"
 description = ""
 category = "main"
 optional = false
-python-versions = "^3.7"
+python-versions = "^3.8"
 develop = false
 
 [package.dependencies]
@@ -379,7 +379,7 @@ numpy = "^1.21.0"
 type = "git"
 url = "https://github.com/ethanabrooks/run-logger.git"
 reference = "main"
-resolved_reference = "082f9dc7ca0ac318caa88c534b678020e9eb678c"
+resolved_reference = "6cafda7b9cbe32053857f53e14902d4285eaa69d"
 
 [[package]]
 name = "rx"
@@ -443,7 +443,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e1abf51da85b2d33fb1cd358d80ede6b02c832008e8fc01b8f0d55f10fd46157"
+content-hash = "8e0bab58b00b711acc08d0599dd72807bf187d19684bf38fddd2ea22fd5cf672"
 
 [metadata.files]
 appdirs = [
