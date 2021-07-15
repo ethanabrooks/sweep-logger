@@ -8,9 +8,9 @@ from typing import Optional
 import yaml
 from redis import Redis
 
-from run_logger import ParamChoice, SweepMethod, get_logger
-
-from sweep_logger.reproducibility_info import get_reproducibility_info
+from params import ParamChoice, SweepMethod
+from reproducibility_info import get_reproducibility_info
+from logger import get_logger
 
 
 def load_config(config: Path) -> dict:
@@ -90,7 +90,7 @@ def main():
         choices=["hasura", "jsonlines"],
         default="hasura",
     )
-    parser.add_argument("--log-level", "-ll", choices=log_levels, default="info")
+    parser.add_argument("--log-level", "-ll", choices=log_levels, default="INFO")
     parser.add_argument(
         "--method",
         "-m",

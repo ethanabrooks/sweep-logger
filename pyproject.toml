@@ -7,7 +7,7 @@ authors = ["Ethan Brooks <ethanabrooks@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 PyYAML = "^5.4.1"
-run-logger = {git = "https://github.com/ethanabrooks/run-logger.git", rev = "6cafda7b9cbe32053857f53e14902d4285eaa69d"}
+run-logger = {git = "https://github.com/ethanabrooks/run-logger.git", rev = "9220cab4c8431dc3306db566df481f38875d41b1"}
 redis = "^3.5.3"
 gql = "^2.0.0"
 
