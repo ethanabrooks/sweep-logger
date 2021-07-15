@@ -39,4 +39,5 @@ RUN pip install poetry\
 
 COPY . .
 
-ENTRYPOINT ["poetry", "run", "python", "sweep_logger/main.py"]
+VOLUME /config
+ENTRYPOINT ["poetry", "run", "create-sweep"]
