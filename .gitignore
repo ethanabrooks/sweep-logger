@@ -1,2 +1,3 @@
 .env
 config.yml
+sweep_logger/__pycache__
