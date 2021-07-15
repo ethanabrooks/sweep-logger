@@ -8,9 +8,9 @@ from typing import Optional
 import yaml
 from redis import Redis
 
-from params import ParamChoice, SweepMethod
-from reproducibility_info import get_reproducibility_info
-from logger import get_logger
+from sweep_logger.params import ParamChoice, SweepMethod
+from sweep_logger.reproducibility_info import get_reproducibility_info
+from sweep_logger.logger import get_logger
 
 
 def load_config(config: Path) -> dict:

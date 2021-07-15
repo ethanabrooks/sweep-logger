@@ -7,7 +7,7 @@ from typing import List
 import run_logger
 from gql import gql
 
-from params import ParamChoice, SweepMethod
+from sweep_logger.params import ParamChoice, SweepMethod
 
 
 class Logger(run_logger.Logger):
