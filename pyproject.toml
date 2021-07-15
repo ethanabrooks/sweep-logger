@@ -10,6 +10,7 @@ PyYAML = "^5.4.1"
 run-logger = {git = "https://github.com/ethanabrooks/run-logger.git", rev = "9220cab4c8431dc3306db566df481f38875d41b1"}
 redis = "^3.5.3"
 gql = "^2.0.0"
+jsonlines = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.13.9"
