@@ -22,3 +22,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 create-sweep = 'sweep_logger.main:main'
+migration = { source = "bin/run_db_migrations.sh", type = "file" }
+
