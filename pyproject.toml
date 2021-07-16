@@ -22,3 +22,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 create-sweep = 'sweep_logger.main:main'
+sample_shscript = { reference = "script-files/sample_script.sh", type= "file" }
