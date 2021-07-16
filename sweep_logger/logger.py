@@ -13,10 +13,10 @@ from sweep_logger.params import ParamChoice, SweepMethod
 class Logger(run_logger.Logger):
     @abc.abstractmethod
     def create_sweep(
-            self,
-            method: SweepMethod,
-            metadata: dict,
-            choices: List[ParamChoice],
+        self,
+        method: SweepMethod,
+        metadata: dict,
+        choices: List[ParamChoice],
     ) -> int:
         pass
 
@@ -60,10 +60,10 @@ class HasuraLogger(run_logger.HasuraLogger):
     )
 
     def create_sweep(
-            self,
-            method: SweepMethod,
-            metadata: dict,
-            choices: List[ParamChoice],
+        self,
+        method: SweepMethod,
+        metadata: dict,
+        choices: List[ParamChoice],
     ) -> int:
         if method == SweepMethod.grid:
             grid_index = 0
@@ -98,10 +98,10 @@ class HasuraLogger(run_logger.HasuraLogger):
 @dataclass
 class JSONLinesLogger(run_logger.JSONLinesLogger):
     def create_sweep(
-            self,
-            method: SweepMethod,
-            metadata: dict,
-            choices: List[ParamChoice],
+        self,
+        method: SweepMethod,
+        metadata: dict,
+        choices: List[ParamChoice],
     ) -> int:
         return 0
 

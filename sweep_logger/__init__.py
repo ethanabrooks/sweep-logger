@@ -6,4 +6,3 @@ __all__ = [
     "JSONLinesLogger",
     "get_logger",
 ]
-
