@@ -9,13 +9,16 @@ def execute_sweep():
     redis = Redis(host="redis")
     while (rank := redis.rpop("rank-queue")) is None:
         time.sleep(0.1)
+    assert rank != b"done"
+    print("rank ==", rank)
 
     while (sweep_id := redis.get("sweep_id")) is None:
         time.sleep(0.1)
+    print("sweep_id ==", sweep_id)
 
     env = os.environ.copy()
     env["CUDA_VISIBLE_DEVICES"] = rank.decode("utf-8")
-    while os.getenv("NUM_RUNS") is None or redis.rpop("runs-queue") is not None:
+    while redis.rpop("runs-queue") != "done":
         cmd = f"python {os.getenv('SCRIPT')} sweep {sweep_id.decode('utf-8')}"
         print(cmd)
         subprocess.run(cmd.split(), env=env)
