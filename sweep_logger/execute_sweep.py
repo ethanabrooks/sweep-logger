@@ -18,7 +18,7 @@ def execute_sweep():
 
     env = os.environ.copy()
     env["CUDA_VISIBLE_DEVICES"] = rank.decode("utf-8")
-    while redis.rpop("runs-queue") != "done":
+    while (x := redis.rpop("runs-queue")) != b"done":
         cmd = f"python {os.getenv('SCRIPT')} sweep {sweep_id.decode('utf-8')}"
         print(cmd)
         subprocess.run(cmd.split(), env=env)
