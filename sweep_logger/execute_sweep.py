@@ -7,9 +7,7 @@ from redis import Redis
 
 def execute_sweep():
     redis = Redis(host="redis")
-    while (rank := redis.rpop("rank-queue")) is None:
-        time.sleep(0.1)
-    assert rank != b"done"
+    rank = redis.decr("rank-counter")
     print("rank ==", rank)
 
     while (sweep_id := redis.get("sweep_id")) is None:
@@ -17,8 +15,12 @@ def execute_sweep():
     print("sweep_id ==", sweep_id)
 
     env = os.environ.copy()
-    env["CUDA_VISIBLE_DEVICES"] = rank.decode("utf-8")
-    while (x := redis.rpop("runs-queue")) != b"done":
+    env["CUDA_VISIBLE_DEVICES"] = str(rank)
+
+    while (
+        redis.object("encoding", "runs-counter") != b"int"
+        or redis.decr("runs-counter") >= 0
+    ):
         cmd = f"python {os.getenv('SCRIPT')} sweep {sweep_id.decode('utf-8')}"
         print(cmd)
         subprocess.run(cmd.split(), env=env)
