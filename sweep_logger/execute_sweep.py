@@ -2,13 +2,12 @@ import argparse
 import os
 import subprocess
 import time
-from typing import Optional
 
 from redis import Redis
 from run_logger import Client
 
 
-def execute_sweep(hasura_uri: str, hasura_secret: Optional[str], command: str):
+def execute_sweep(graphql_endpoint: str, command: str):
     redis = Redis(host="redis")
     rank = redis.decr("rank-counter")
     print("rank ==", rank)
@@ -20,7 +19,7 @@ def execute_sweep(hasura_uri: str, hasura_secret: Optional[str], command: str):
     env = os.environ.copy()
     env["CUDA_VISIBLE_DEVICES"] = str(rank)
 
-    client = Client(hasura_uri=hasura_uri, hasura_secret=hasura_secret)
+    client = Client(graphql_endpoint)
 
     def keep_running():
         data = client.execute(
@@ -53,6 +52,7 @@ if __name__ == "__main__":
         required=True,
         help="command execute. `sweep_id` will be given to command as in `script sweep_id`.",
     )
-    PARSER.add_argument("--hasura-uri", required=True, help="Graphql endpoint")
-    PARSER.add_argument("--hasura-secret")
+    PARSER.add_argument(
+        "--graphql-endpoint", required=True, help="Endpoint to use for Hasura"
+    )
     execute_sweep(**vars(PARSER.parse_args()))
