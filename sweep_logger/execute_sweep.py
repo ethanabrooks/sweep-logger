@@ -8,7 +8,7 @@ from redis import Redis
 from run_logger import Client
 
 
-def execute_sweep(hasura_uri: str, hasura_secret: Optional[str]):
+def execute_sweep(hasura_uri: str, hasura_secret: Optional[str], command: str):
     redis = Redis(host="redis")
     rank = redis.decr("rank-counter")
     print("rank ==", rank)
@@ -40,7 +40,7 @@ mutation incr_run_count($sweep_id: Int!) {
         return max_runs is None or run_count < max_runs
 
     while keep_running():
-        cmd = f"python {os.getenv('SCRIPT')} sweep {sweep_id.decode('utf-8')}"
+        cmd = f"{command} {sweep_id.decode('utf-8')}"
         print(cmd)
         subprocess.run(cmd.split(), env=env)
         time.sleep(10)
@@ -48,6 +48,11 @@ mutation incr_run_count($sweep_id: Int!) {
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser()
-    PARSER.add_argument("--hasura-uri", required=True)
+    PARSER.add_argument(
+        "--command",
+        required=True,
+        help="command execute. `sweep_id` will be given to command as in `script sweep_id`.",
+    )
+    PARSER.add_argument("--hasura-uri", required=True, help="Graphql endpoint")
     PARSER.add_argument("--hasura-secret")
     execute_sweep(**vars(PARSER.parse_args()))
