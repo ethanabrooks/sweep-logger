@@ -380,8 +380,8 @@ redis = "^3.5.3"
 [package.source]
 type = "git"
 url = "https://github.com/ethanabrooks/run-logger.git"
-reference = "d8ebbbc2a1eb2d9fa1504d841bb9fc57db8e4800"
-resolved_reference = "d8ebbbc2a1eb2d9fa1504d841bb9fc57db8e4800"
+reference = "207da3f0f54213ec9f5840bbb9a60718e38c3cf6"
+resolved_reference = "207da3f0f54213ec9f5840bbb9a60718e38c3cf6"
 
 [[package]]
 name = "rx"
@@ -453,7 +453,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "50dd2faf7bc4dd71ce03400cbdf09e1e079a37e3e03f991dcb5f9a32b9e03eba"
+content-hash = "d5964fb294650161ec4440150e1adae7961cd5c4618a6e6176ab337e418dd152"
 
 [metadata.files]
 appdirs = [
