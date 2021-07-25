@@ -1,6 +1,5 @@
 import abc
 import json
-from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import List
 
@@ -96,7 +95,10 @@ class HasuraLogger(run_logger.HasuraLogger):
 
 
 @dataclass
-class JSONLinesLogger(run_logger.JSONLinesLogger):
+class JSONLinesLogger(Logger, run_logger.JSONLinesLogger):
+    def blob(self, blob: bytes) -> None:
+        return super().blob(blob)
+
     def create_sweep(
         self,
         method: SweepMethod,
@@ -104,18 +106,3 @@ class JSONLinesLogger(run_logger.JSONLinesLogger):
         choices: List[ParamChoice],
     ) -> int:
         return 0
-
-
-_names = dict(
-    hasura=lambda: HasuraLogger(),
-    jsonl=lambda: JSONLinesLogger(),
-)
-
-
-@contextmanager
-def get_logger(logger_type="hasura"):
-    thunk = _names.get(logger_type)
-    if thunk is None:
-        raise RuntimeError("Invalid Config")
-    with thunk() as logger:
-        yield logger
