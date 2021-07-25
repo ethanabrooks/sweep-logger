@@ -45,14 +45,18 @@ mutation incr_run_count($sweep_id: Int!) {
         time.sleep(10)
 
 
-if __name__ == "__main__":
-    PARSER = argparse.ArgumentParser()
-    PARSER.add_argument(
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         "--command",
         required=True,
         help="command execute. `sweep_id` will be given to command as in `script sweep_id`.",
     )
-    PARSER.add_argument(
+    parser.add_argument(
         "--graphql-endpoint", required=True, help="Endpoint to use for Hasura"
     )
-    execute_sweep(**vars(PARSER.parse_args()))
+    execute_sweep(**vars(parser.parse_args()))
+
+
+if __name__ == "__main__":
+    main()
