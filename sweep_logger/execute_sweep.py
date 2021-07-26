@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 import time
+import sys
 from gql import gql
 
 from redis import Redis
@@ -15,7 +16,7 @@ def execute_sweep(graphql_endpoint: str, command: str):
 
     while (sweep_id := redis.get("sweep_id")) is None:
         time.sleep(0.1)
-    sweep_id = int(sweep_id.decode("utf-8"))
+    sweep_id = int(sweep_id)
     print("sweep_id ==", sweep_id)
 
     env = os.environ.copy()
@@ -39,8 +40,8 @@ mutation incr_run_count($sweep_id: Int!) {
             variable_values=dict(sweep_id=sweep_id),
         )
         run_count = data["update_sweep"]["returning"][0]["run_count"]
-        max_runs = redis.get("max_runs")
-        return max_runs is None or run_count < max_runs
+        max_runs = redis.get("max-runs")
+        return not max_runs or run_count <= int(max_runs)
 
     while keep_running():
         cmd = f"{command} {sweep_id}"
