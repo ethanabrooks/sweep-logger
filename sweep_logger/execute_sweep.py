@@ -28,10 +28,10 @@ def execute_sweep(graphql_endpoint: str, command: str):
         data = client.execute(
             gql(
                 """
-mutation incr_run_count($sweep_id: Int!) {
-  update_sweep(where: {id: {_eq: $sweep_id}}, _inc: {run_count: 1}) {
+mutation decr_remaining_runs($sweep_id: Int!) {
+  update_sweep(where: {id: {_eq: $sweep_id}}, _inc: {remaining_runs: -1}) {
     returning {
-      run_count
+      remaining_runs
     }
   }
 }
@@ -39,9 +39,8 @@ mutation incr_run_count($sweep_id: Int!) {
             ),
             variable_values=dict(sweep_id=sweep_id),
         )
-        run_count = data["update_sweep"]["returning"][0]["run_count"]
-        max_runs = redis.get("max-runs")
-        return not max_runs or run_count <= int(max_runs)
+        remaining_runs = data["update_sweep"]["returning"][0]["remaining_runs"]
+        return remaining_runs is None or remaining_runs >= 0
 
     while keep_running():
         cmd = f"{command} {sweep_id}"

@@ -4,6 +4,7 @@ import copy
 import logging
 from pathlib import Path
 from typing import Optional
+from pprint import pprint, pformat
 
 import yaml
 from redis import Redis
@@ -20,9 +21,12 @@ def run(
     name: Optional[str],
     project: Optional[str],
     graphql_endpoint: str,
+    remaining_runs: Optional[int],
 ) -> int:
     with config.open() as f:
         config = yaml.load(f, yaml.FullLoader)
+
+    assert isinstance(config, (dict, list)), pformat(config)
     logging.getLogger().setLevel(log_level)
     metadata = dict(
         config=config,
@@ -41,6 +45,7 @@ def run(
             method=SweepMethod[method],
             metadata=metadata,
             choices=choices,
+            remaining_runs=remaining_runs,
         )
     logging.info(f"Sweep ID: {sweep_id}")
     return sweep_id
@@ -69,7 +74,7 @@ def main():
     parser.add_argument(
         "--config",
         "-c",
-        help="path to sweep config yaml file",
+        help="Path to sweep config yaml file.",
         type=Path,
         default=Path("config.yml"),
     )
@@ -79,15 +84,24 @@ def main():
         "-m",
         choices=["grid", "random"],
         default="random",
-        help="whether to perform grid-search on parameters in config.yml or randomly sample",
+        help="Whether to perform grid-search on parameters in config.yml or randomly sample.",
     )
     parser.add_argument(
-        "--name", "-n", help="name of sweep (logged in metadata)", default=None
+        "--name", "-n", help="Name of sweep (logged in metadata).", default=None
     )
     parser.add_argument(
-        "--project", "-p", help="name of project (logged in metadata)", default=None
+        "--project", "-p", help="Name of project (logged in metadata).", default=None
     )
-    parser.add_argument("--graphql-endpoint", "-g", help="Endpoint to use for hasura")
+    parser.add_argument("--graphql-endpoint", "-g", help="Endpoint to use for hasura.")
+    parser.add_argument(
+        "--remaining-runs",
+        "-r",
+        help="Set a limit on the number of runs to launch for this sweep. If None or '', an unlimited number of runs "
+        "will be launched.",
+        type=lambda string: int(string)
+        if string
+        else None,  # handle case where string == ''
+    )
     parser.set_defaults(func=run)
     subparsers = parser.add_subparsers()
     redis_parser = subparsers.add_parser("redis")
