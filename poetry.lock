@@ -381,7 +381,7 @@ redis = "^3.5.3"
 type = "git"
 url = "https://github.com/ethanabrooks/run-logger.git"
 reference = "main"
-resolved_reference = "0c0060c07a6b6609645c5a75da97f3dffbcbef84"
+resolved_reference = "d43097af4f12c3b6977eec63bac831c67bcc350e"
 
 [[package]]
 name = "rx"
