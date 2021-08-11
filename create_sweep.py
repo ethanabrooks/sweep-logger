@@ -40,6 +40,7 @@ def run(
         if isinstance(config, list):
             config = {"": config}
         choices = [ParamChoice(k, v) for k, v in config.items()]
+        logging.info(f"Remaining runs: {remaining_runs}")
 
         sweep_id = logger.create_sweep(
             method=SweepMethod[method],
