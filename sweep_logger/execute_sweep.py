@@ -40,12 +40,12 @@ mutation decr_remaining_runs($sweep_id: Int!) {
             variable_values=dict(sweep_id=sweep_id),
         )
         remaining_runs = data["update_sweep"]["returning"]
-        print("Remaining runs:", remaining_runs)
+        print("Remaining runs:", remaining_runs, flush=True)
         return not remaining_runs or (remaining_runs[0]["remaining_runs"] >= 0)
 
     while keep_running():
         cmd = f"{command} {sweep_id}"
-        print(cmd)
+        print(cmd, flush=True)
         subprocess.run(cmd.split(), env=env)
         time.sleep(10)
 
