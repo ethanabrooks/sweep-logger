@@ -2,14 +2,14 @@ import argparse
 import os
 import subprocess
 import time
-import sys
-from gql import gql
+from typing import List
 
+from gql import gql
 from redis import Redis
 from run_logger import Client
 
 
-def execute_sweep(graphql_endpoint: str, command: str):
+def execute_sweep(graphql_endpoint: str, command: str, devices: List[int]):
     redis = Redis(host="redis")
     rank = redis.decr("rank-counter")
     print("rank ==", rank)
@@ -20,7 +20,7 @@ def execute_sweep(graphql_endpoint: str, command: str):
     print("sweep_id ==", sweep_id)
 
     env = os.environ.copy()
-    env["CUDA_VISIBLE_DEVICES"] = str(rank)
+    env["CUDA_VISIBLE_DEVICES"] = str(devices[rank])
 
     client = Client(graphql_endpoint)
 
@@ -62,6 +62,13 @@ def main():
     )
     parser.add_argument(
         "--graphql-endpoint", required=True, help="Endpoint to use for Hasura"
+    )
+    parser.add_argument(
+        "--devices",
+        type=int,
+        nargs="+",
+        default=list(range(32)),
+        help="Devices to use for CUDA_VISIBLE_DEVICES (each process will be assigned to one device from this list).",
     )
     execute_sweep(**vars(parser.parse_args()))
 
