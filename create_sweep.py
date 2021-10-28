@@ -2,9 +2,10 @@
 import argparse
 import copy
 import logging
+from functools import reduce
 from pathlib import Path
+from pprint import pformat
 from typing import Optional
-from pprint import pprint, pformat
 
 import yaml
 from redis import Redis
@@ -42,8 +43,19 @@ def run(
         choices = [ParamChoice(k, v) for k, v in config.items()]
         logging.info(f"Remaining runs: {remaining_runs}")
 
+        method = SweepMethod[method]
+
+        if method == SweepMethod.grid and remaining_runs is None:
+            remaining_runs = 1
+            for v in config.values():
+                try:
+                    length = len(v)
+                except TypeError:
+                    length = 1
+                remaining_runs *= length
+
         sweep_id = logger.create_sweep(
-            method=SweepMethod[method],
+            method=method,
             metadata=metadata,
             choices=choices,
             remaining_runs=remaining_runs,
