@@ -52,7 +52,10 @@ def run(
                     length = len(v)
                 except TypeError:
                     length = 1
+                print("values:", v)
+                print("length:", length)
                 remaining_runs *= length
+                print("remaining_runs:", remaining_runs)
 
         sweep_id = logger.create_sweep(
             method=method,
