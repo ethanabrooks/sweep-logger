@@ -48,14 +48,11 @@ def run(
         if method == SweepMethod.grid and remaining_runs is None:
             remaining_runs = 1
             for v in config.values():
-                try:
-                    length = len(v)
-                except TypeError:
-                    length = 1
-                print("values:", v)
-                print("length:", length)
-                remaining_runs *= length
-                print("remaining_runs:", remaining_runs)
+                if isinstance(v, list):
+                    print("values:", v)
+                    print("length:", len(v))
+                    remaining_runs *= len(v)
+                    print("remaining_runs:", remaining_runs)
 
         sweep_id = logger.create_sweep(
             method=method,
