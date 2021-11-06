@@ -49,10 +49,7 @@ def run(
             remaining_runs = 1
             for v in config.values():
                 if isinstance(v, list):
-                    print("values:", v)
-                    print("length:", len(v))
                     remaining_runs *= len(v)
-                    print("remaining_runs:", remaining_runs)
 
         sweep_id = logger.create_sweep(
             method=method,
