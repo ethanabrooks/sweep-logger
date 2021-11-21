@@ -10,9 +10,9 @@ from sweep_logger import HasuraLogger
 
 @dataclass
 class NewParams:
-    config_params: dict
-    sweep_params: dict
     load_params: dict
+    sweep_params: dict
+    config_params: dict
 
 
 def get_config_params(config: Union[str, Path]) -> dict:
