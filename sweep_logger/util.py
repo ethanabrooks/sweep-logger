@@ -94,8 +94,13 @@ def initialize(
     sweep_id: int = None,
     load_id: int = None,
     use_logger: bool = False,
-    **params,
+    metadata=None,
+    params=None,
 ) -> Tuple[dict, HasuraLogger]:
+    if metadata is None:
+        metadata = {}
+    if params is None:
+        params = {}
     logger = HasuraLogger(graphql_endpoint) if use_logger else None
     new_params = get_new_params(
         logger=logger,
@@ -110,4 +115,6 @@ def initialize(
         new_params=new_params,
         **params,
     )
+    if logger is not None:
+        logger.update_metadata(metadata)
     return params, logger
