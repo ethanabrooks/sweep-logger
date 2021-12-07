@@ -38,11 +38,12 @@ metadata(path: "parameters")
 
 
 def get_new_params(
-    logger: HasuraLogger = None,
-    config: Union[Path, str] = None,
+    create_run: bool,
+    logger: HasuraLogger,
     charts: List[dict] = None,
-    sweep_id: int = None,
+    config: Union[Path, str] = None,
     load_id: int = None,
+    sweep_id: int = None,
 ) -> NewParams:
 
     config_params = None
@@ -52,7 +53,7 @@ def get_new_params(
     if config is not None:
         config_params = get_config_params(config)
 
-    if logger is not None:
+    if create_run:
         if charts is None:
             charts = []
         sweep_params = logger.create_run(
@@ -72,7 +73,7 @@ def get_new_params(
 
 
 def update_params(
-    logger: Optional[HasuraLogger],
+    logger: HasuraLogger,
     new_params: NewParams,
     name: str,
     **params,
@@ -82,7 +83,7 @@ def update_params(
         if p is not None:
             params.update(p)
 
-    if logger is not None:
+    if logger.run_id is not None:
         logger.update_metadata(dict(parameters=params, run_id=logger.run_id, name=name))
     return params
 
@@ -93,7 +94,7 @@ def initialize(
     charts: List[dict] = None,
     sweep_id: int = None,
     load_id: int = None,
-    use_logger: bool = False,
+    create_run: bool = False,
     metadata=None,
     params=None,
 ) -> Tuple[dict, HasuraLogger]:
@@ -101,13 +102,14 @@ def initialize(
         metadata = {}
     if params is None:
         params = {}
-    logger = HasuraLogger(graphql_endpoint) if use_logger else None
+    logger = HasuraLogger(graphql_endpoint)
     new_params = get_new_params(
-        logger=logger,
-        config=config,
         charts=charts,
-        sweep_id=sweep_id,
+        config=config,
+        create_run=create_run,
         load_id=load_id,
+        logger=logger,
+        sweep_id=sweep_id,
     )
     params.update(name=params.get("name"))
     params = update_params(
