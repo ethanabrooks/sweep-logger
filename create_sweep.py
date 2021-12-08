@@ -12,6 +12,15 @@ from redis import Redis
 from sweep_logger import HasuraLogger
 from sweep_logger.params import ParamChoice, SweepMethod
 from sweep_logger.reproducibility_info import get_reproducibility_info
+import math
+
+
+def compute_remaining_runs(params):
+    if isinstance(params, list):
+        return sum(compute_remaining_runs(param) for param in params)
+    if isinstance(params, dict):
+        return math.prod(map(compute_remaining_runs, params.values()))
+    return 1
 
 
 def run(
@@ -45,10 +54,7 @@ def run(
         method = SweepMethod[method]
 
         if method == SweepMethod.grid and remaining_runs is None:
-            remaining_runs = 1
-            for v in config.values():
-                if isinstance(v, list):
-                    remaining_runs *= len(v)
+            remaining_runs = compute_remaining_runs(config)
 
         sweep_id = logger.create_sweep(
             method=method,
