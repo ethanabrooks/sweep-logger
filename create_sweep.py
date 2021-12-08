@@ -2,7 +2,6 @@
 import argparse
 import copy
 import logging
-from functools import reduce
 from pathlib import Path
 from pprint import pformat
 from typing import Optional

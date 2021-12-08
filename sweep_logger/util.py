@@ -1,6 +1,6 @@
 from dataclasses import astuple, dataclass
 from pathlib import Path
-from typing import List, Optional, Tuple, Union
+from typing import List, Tuple, Union
 
 import yaml
 from gql import gql

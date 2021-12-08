@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import Any, Iterable, Mapping, NamedTuple, Tuple
+from typing import Any, Iterable, Mapping, NamedTuple
 
 import numpy as np
 

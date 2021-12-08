@@ -25,8 +25,17 @@ class Logger(run_logger.Logger):
 class HasuraLogger(run_logger.HasuraLogger):
     insert_new_sweep_mutation = gql(
         """
-mutation insert_new_sweep($grid_index: Int, $metadata: jsonb, $parameter_choices: [parameter_choices_insert_input!]!, $remaining_runs: Int) {
-  insert_sweep_one(object: {grid_index: $grid_index, metadata: $metadata, parameter_choices: {data: $parameter_choices}, remaining_runs: $remaining_runs}) {
+mutation insert_new_sweep(
+    $grid_index: Int,
+    $metadata: jsonb,
+    $parameter_choices: [parameter_choices_insert_input!]!,
+    $remaining_runs: Int
+) {
+  insert_sweep_one(object: {
+      grid_index: $grid_index,
+      metadata: $metadata,
+      parameter_choices: {data: $parameter_choices},
+      remaining_runs: $remaining_runs}) {
     grid_index
     id
     metadata
