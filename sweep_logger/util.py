@@ -83,7 +83,7 @@ def update_params(
         if p is not None:
             params.update(p)
 
-    if logger.run_id is not None:
+    if logger is not None and logger.run_id is not None:
         logger.update_metadata(dict(parameters=params, run_id=logger.run_id, name=name))
     return params
 
@@ -117,6 +117,6 @@ def initialize(
         new_params=new_params,
         **params,
     )
-    if logger is not None:
+    if logger is not None and logger.run_id is not None:
         logger.update_metadata(metadata)
     return params, logger
