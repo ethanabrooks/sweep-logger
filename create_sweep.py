@@ -2,6 +2,7 @@
 import argparse
 import copy
 import logging
+import math
 from pathlib import Path
 from pprint import pformat
 from typing import Optional
@@ -12,7 +13,6 @@ from redis import Redis
 from sweep_logger import HasuraLogger
 from sweep_logger.params import ParamChoice, SweepMethod
 from sweep_logger.reproducibility_info import get_reproducibility_info
-import math
 
 
 def compute_remaining_runs(params):
