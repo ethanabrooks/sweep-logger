@@ -40,4 +40,4 @@ RUN pip install poetry\
 COPY . .
 
 VOLUME /config
-ENTRYPOINT ["poetry", "run", "python", "create_sweep.py"]
+ENTRYPOINT ["poetry", "run", "python", "sweep_logger/create_sweep.py"]

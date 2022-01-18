@@ -23,3 +23,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 execute-sweep = 'sweep_logger.execute_sweep:main'
+create-sweep = 'sweep_logger.create_sweep:main'
