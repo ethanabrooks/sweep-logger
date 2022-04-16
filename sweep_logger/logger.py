@@ -1,12 +1,21 @@
 import abc
 import json
 from dataclasses import dataclass
-from typing import List, Optional
+from enum import Enum, auto
+from typing import Iterable, List, NamedTuple, Optional
 
 import run_logger
 from gql import gql
 
-from sweep_logger.params import ParamChoice, SweepMethod
+
+class ParamChoice(NamedTuple):
+    key: str
+    choice: Iterable
+
+
+class SweepMethod(Enum):
+    grid = auto()
+    random = auto()
 
 
 class Logger(run_logger.Logger):
@@ -103,18 +112,3 @@ mutation add_run_to_sweep($metadata: jsonb = {}, $sweep_id: Int!, $charts: [char
         )
         sweep_id = response["insert_sweep_one"]["id"]
         return sweep_id
-
-
-@dataclass
-class JSONLinesLogger(Logger, run_logger.JSONLinesLogger):
-    def blob(self, blob: bytes) -> None:
-        return super().blob(blob)
-
-    def create_sweep(
-        self,
-        method: SweepMethod,
-        metadata: dict,
-        choices: List[ParamChoice],
-        remaining_runs: Optional[int],
-    ) -> int:
-        return 0

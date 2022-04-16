@@ -8,10 +8,10 @@ from pprint import pformat
 from typing import Optional
 
 import yaml
+from sweep_logger.logger import ParamChoice, SweepMethod
 from redis import Redis
 
 from sweep_logger import HasuraLogger
-from sweep_logger.params import ParamChoice, SweepMethod
 from sweep_logger.reproducibility_info import get_reproducibility_info
 
 
