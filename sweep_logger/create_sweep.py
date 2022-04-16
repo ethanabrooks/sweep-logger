@@ -12,7 +12,6 @@ from sweep_logger.logger import ParamChoice, SweepMethod
 from redis import Redis
 
 from sweep_logger import HasuraLogger
-from sweep_logger.reproducibility_info import get_reproducibility_info
 
 
 def compute_remaining_runs(params):
@@ -37,10 +36,7 @@ def run(
 
     assert isinstance(config, (dict, list)), pformat(config)
     logging.getLogger().setLevel(log_level)
-    metadata = dict(
-        config=config,
-        **get_reproducibility_info(),
-    )
+    metadata = dict(config=config)
     if name is not None:
         metadata.update(name=name)
     if project is not None:
