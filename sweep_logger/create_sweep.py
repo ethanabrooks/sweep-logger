@@ -3,6 +3,7 @@ import argparse
 import copy
 import logging
 import math
+import os
 from pathlib import Path
 from pprint import pformat
 from typing import Optional
@@ -103,7 +104,12 @@ def main():
     parser.add_argument(
         "--project", "-p", help="Name of project (logged in metadata).", default=None
     )
-    parser.add_argument("--graphql-endpoint", "-g", help="Endpoint to use for hasura.")
+    parser.add_argument(
+        "--graphql-endpoint",
+        "-g",
+        default=os.getenv("GRAPHQL_ENDPOINT"),
+        help="Endpoint to use for hasura.",
+    )
     parser.add_argument(
         "--remaining-runs",
         "-r",
