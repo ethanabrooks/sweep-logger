@@ -25,9 +25,7 @@ def execute_sweep(graphql_endpoint: str, command: str, devices: List[int]):
     client = Client(graphql_endpoint)
 
     def keep_running():
-        data = client.execute(
-            gql(
-                """
+        query = """
 mutation decr_remaining_runs($sweep_id: Int!) {
   update_sweep(where: {id: {_eq: $sweep_id}}, _inc: {remaining_runs: -1}) {
     returning {
@@ -36,8 +34,20 @@ mutation decr_remaining_runs($sweep_id: Int!) {
   }
 }
         """
-            ),
-            variable_values=dict(sweep_id=sweep_id),
+        print("====================graphql-endpoint=================")
+        print(graphql_endpoint)
+        print("=====================================================")
+        print("====================query============================")
+        print(query)
+        print("=====================================================")
+        variable_values = dict(sweep_id=sweep_id)
+        print("====================variable-values==================")
+        print(variable_values)
+        print("=====================================================")
+
+        data = client.execute(
+            gql(query),
+            variable_values=variable_values,
         )
         remaining_runs = data["update_sweep"]["returning"]
         print(remaining_runs, flush=True)
