@@ -10,7 +10,6 @@ from typing import Optional
 
 import yaml
 from sweep_logger.logger import ParamChoice, SweepMethod
-from redis import Redis
 
 from sweep_logger import HasuraLogger
 
@@ -61,12 +60,6 @@ def run(
         )
     logging.info(f"Sweep ID: {sweep_id}")
     return sweep_id
-
-
-def run_redis(host, port, **kwargs):
-    sweep_id = run(**kwargs)
-    redis = Redis(host=host, port=port)
-    redis.set("sweep_id", sweep_id)
 
 
 log_levels = [
@@ -121,10 +114,6 @@ def main():
     )
     parser.set_defaults(func=run)
     subparsers = parser.add_subparsers()
-    redis_parser = subparsers.add_parser("redis")
-    redis_parser.set_defaults(func=run_redis)
-    redis_parser.add_argument("--host", default="redis")
-    redis_parser.add_argument("--port", default=6379)
     args = parser.parse_args()
     _args = vars(copy.deepcopy(args))
     del _args["func"]
