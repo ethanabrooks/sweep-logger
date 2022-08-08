@@ -27,9 +27,8 @@ def run(
     log_level: str,
     method: str,
     name: Optional[str],
-    project: Optional[str],
     graphql_endpoint: str,
-    remaining_runs: Optional[int],
+    project: Optional[str] = None,
 ) -> int:
     with config.open() as f:
         config = yaml.load(f, yaml.FullLoader)
@@ -45,18 +44,12 @@ def run(
         if isinstance(config, list):
             config = {"": config}
         choices = [ParamChoice(k, v) for k, v in config.items()]
-        logging.info(f"Remaining runs: {remaining_runs}")
-
         method = SweepMethod[method]
-
-        if method == SweepMethod.grid and remaining_runs is None:
-            remaining_runs = compute_remaining_runs(config)
 
         sweep_id = logger.create_sweep(
             method=method,
             metadata=metadata,
             choices=choices,
-            remaining_runs=remaining_runs,
         )
     logging.info(f"Sweep ID: {sweep_id}")
     return sweep_id
@@ -113,7 +106,6 @@ def main():
         else None,  # handle case where string == ''
     )
     parser.set_defaults(func=run)
-    subparsers = parser.add_subparsers()
     args = parser.parse_args()
     _args = vars(copy.deepcopy(args))
     del _args["func"]

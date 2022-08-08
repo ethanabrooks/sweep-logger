@@ -25,7 +25,6 @@ class Logger(run_logger.Logger):
         choices: List[ParamChoice],
         metadata: dict,
         method: SweepMethod,
-        remaining_runs: Optional[int],
     ) -> int:
         pass
 
@@ -38,13 +37,12 @@ mutation insert_new_sweep(
     $grid_index: Int,
     $metadata: jsonb,
     $parameter_choices: [parameter_choices_insert_input!]!,
-    $remaining_runs: Int
 ) {
   insert_sweep_one(object: {
       grid_index: $grid_index,
       metadata: $metadata,
       parameter_choices: {data: $parameter_choices},
-      remaining_runs: $remaining_runs}) {
+      }) {
     grid_index
     id
     metadata
@@ -82,7 +80,6 @@ mutation add_run_to_sweep($metadata: jsonb = {}, $sweep_id: Int!, $charts: [char
         choices: List[ParamChoice],
         metadata: dict,
         method: SweepMethod,
-        remaining_runs: Optional[int],
     ) -> int:
         if method == SweepMethod.grid:
             grid_index = 0
@@ -107,7 +104,6 @@ mutation add_run_to_sweep($metadata: jsonb = {}, $sweep_id: Int!, $charts: [char
                 parameter_choices=[
                     dict(Key=k, choice=preprocess_params(vs)) for k, vs in choices
                 ],
-                remaining_runs=remaining_runs,
             ),
         )
         sweep_id = response["insert_sweep_one"]["id"]
